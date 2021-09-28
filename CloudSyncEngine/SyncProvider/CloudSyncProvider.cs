@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
+using CloudSyncEngine.SyncProvider;
 using Vanara.Extensions;
 using Vanara.InteropServices;
 using static Vanara.PInvoke.CldApi;
@@ -456,10 +457,7 @@ namespace Vanara.PInvoke.Tests
             return ph[0].CreateUsn;
         }
 
-        public void CreatePlaceHolderFolder(string name)
-        {
 
-        }
 
         /// <summary>Creates one or more new placeholder files or directories under a sync root tree.</summary>
         /// <param name="placeholders">
@@ -694,56 +692,112 @@ namespace Vanara.PInvoke.Tests
         // 	searchCrawlScopeManager.Item.SaveAll();
         // }
 
+        // private void ConnectSyncRootTransferCallbacks()
+        // {
+        //     callbackTable ??= new[]
+        //     {
+        //         new CF_CALLBACK_REGISTRATION
+        //             { Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_CANCEL_FETCH_DATA, Callback = OnCancelFetchData },
+        //         new CF_CALLBACK_REGISTRATION
+        //         {
+        //             Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_CANCEL_FETCH_PLACEHOLDERS,
+        //             Callback = OnCancelFetchPlaceholders
+        //         },
+        //         new CF_CALLBACK_REGISTRATION
+        //             { Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_FETCH_DATA, Callback = OnFetchDataStatic },
+        //         new CF_CALLBACK_REGISTRATION
+        //             { Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_FETCH_PLACEHOLDERS, Callback = OnFetchPlaceholders },
+        //         new CF_CALLBACK_REGISTRATION
+        //             { Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_NOTIFY_DEHYDRATE, Callback = OnNotifyDehydrate },
+        //         new CF_CALLBACK_REGISTRATION
+        //         {
+        //             Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_NOTIFY_DEHYDRATE_COMPLETION,
+        //             Callback = OnNotifyDehydrateCompletion
+        //         },
+        //         new CF_CALLBACK_REGISTRATION
+        //             { Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_NOTIFY_DELETE, Callback = OnNotifyDelete },
+        //         new CF_CALLBACK_REGISTRATION
+        //         {
+        //             Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_NOTIFY_DELETE_COMPLETION,
+        //             Callback = OnNotifyDeleteCompletion
+        //         },
+        //         new CF_CALLBACK_REGISTRATION
+        //         {
+        //             Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_NOTIFY_FILE_CLOSE_COMPLETION,
+        //             Callback = OnNotifyFileCloseCompletion
+        //         },
+        //         new CF_CALLBACK_REGISTRATION
+        //         {
+        //             Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_NOTIFY_FILE_OPEN_COMPLETION,
+        //             Callback = OnNotifyFileOpenCompletion
+        //         },
+        //         new CF_CALLBACK_REGISTRATION
+        //             { Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_NOTIFY_RENAME, Callback = OnNotifyRename },
+        //         new CF_CALLBACK_REGISTRATION
+        //         {
+        //             Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_NOTIFY_RENAME_COMPLETION,
+        //             Callback = OnNotifyRenameCompletion
+        //         },
+        //         new CF_CALLBACK_REGISTRATION
+        //             { Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_VALIDATE_DATA, Callback = OnValidateData },
+        //         CF_CALLBACK_REGISTRATION.CF_CALLBACK_REGISTRATION_END
+        //     };
+        //
+        //     CfConnectSyncRoot(SyncRootPath, callbackTable, default, CF_CONNECT_FLAGS.CF_CONNECT_FLAG_NONE, out var ckey)
+        //         .ThrowIfFailed();
+        //     key = ckey;
+        // }
+
         private void ConnectSyncRootTransferCallbacks()
         {
             callbackTable ??= new[]
+        {
+            new CF_CALLBACK_REGISTRATION
+                { Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_CANCEL_FETCH_DATA, Callback = StaticClass.CallBack },
+            new CF_CALLBACK_REGISTRATION
             {
-                new CF_CALLBACK_REGISTRATION
-                    { Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_CANCEL_FETCH_DATA, Callback = OnCancelFetchData },
-                new CF_CALLBACK_REGISTRATION
-                {
-                    Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_CANCEL_FETCH_PLACEHOLDERS,
-                    Callback = OnCancelFetchPlaceholders
-                },
-                new CF_CALLBACK_REGISTRATION
-                    { Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_FETCH_DATA, Callback = OnFetchData },
-                new CF_CALLBACK_REGISTRATION
-                    { Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_FETCH_PLACEHOLDERS, Callback = OnFetchPlaceholders },
-                new CF_CALLBACK_REGISTRATION
-                    { Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_NOTIFY_DEHYDRATE, Callback = OnNotifyDehydrate },
-                new CF_CALLBACK_REGISTRATION
-                {
-                    Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_NOTIFY_DEHYDRATE_COMPLETION,
-                    Callback = OnNotifyDehydrateCompletion
-                },
-                new CF_CALLBACK_REGISTRATION
-                    { Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_NOTIFY_DELETE, Callback = OnNotifyDelete },
-                new CF_CALLBACK_REGISTRATION
-                {
-                    Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_NOTIFY_DELETE_COMPLETION,
-                    Callback = OnNotifyDeleteCompletion
-                },
-                new CF_CALLBACK_REGISTRATION
-                {
-                    Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_NOTIFY_FILE_CLOSE_COMPLETION,
-                    Callback = OnNotifyFileCloseCompletion
-                },
-                new CF_CALLBACK_REGISTRATION
-                {
-                    Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_NOTIFY_FILE_OPEN_COMPLETION,
-                    Callback = OnNotifyFileOpenCompletion
-                },
-                new CF_CALLBACK_REGISTRATION
-                    { Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_NOTIFY_RENAME, Callback = OnNotifyRename },
-                new CF_CALLBACK_REGISTRATION
-                {
-                    Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_NOTIFY_RENAME_COMPLETION,
-                    Callback = OnNotifyRenameCompletion
-                },
-                new CF_CALLBACK_REGISTRATION
-                    { Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_VALIDATE_DATA, Callback = OnValidateData },
-                CF_CALLBACK_REGISTRATION.CF_CALLBACK_REGISTRATION_END
-            };
+                Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_CANCEL_FETCH_PLACEHOLDERS,
+                Callback = StaticClass.CallBack
+            },
+            new CF_CALLBACK_REGISTRATION
+                { Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_FETCH_DATA, Callback = StaticClass.CallBack },
+            new CF_CALLBACK_REGISTRATION
+                { Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_FETCH_PLACEHOLDERS, Callback = StaticClass.CallBack },
+            new CF_CALLBACK_REGISTRATION
+                { Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_NOTIFY_DEHYDRATE, Callback = StaticClass.CallBack },
+            new CF_CALLBACK_REGISTRATION
+            {
+                Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_NOTIFY_DEHYDRATE_COMPLETION,
+                Callback = StaticClass.CallBack
+            },
+            new CF_CALLBACK_REGISTRATION
+                { Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_NOTIFY_DELETE, Callback = StaticClass.CallBack },
+            new CF_CALLBACK_REGISTRATION
+            {
+                Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_NOTIFY_DELETE_COMPLETION,
+                Callback = StaticClass.CallBack
+            },
+            // new CF_CALLBACK_REGISTRATION
+            // {
+            //     Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_NOTIFY_FILE_CLOSE_COMPLETION,
+            //     Callback = OnFetchDataStatic
+            // },
+            // new CF_CALLBACK_REGISTRATION
+            // {
+            //     Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_NOTIFY_FILE_OPEN_COMPLETION,
+            //     Callback = StaticClass.CallBack
+            // },
+            // new CF_CALLBACK_REGISTRATION
+            //     { Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_NOTIFY_RENAME, Callback = OnFetchDataStatic },
+            // new CF_CALLBACK_REGISTRATION
+            // {
+            //     Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_NOTIFY_RENAME_COMPLETION,
+            //     Callback = OnFetchDataStatic
+            // },
+            // new CF_CALLBACK_REGISTRATION
+            //     { Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_VALIDATE_DATA, Callback = OnFetchDataStatic },
+            CF_CALLBACK_REGISTRATION.CF_CALLBACK_REGISTRATION_END
+        };
 
             CfConnectSyncRoot(SyncRootPath, callbackTable, default, CF_CONNECT_FLAGS.CF_CONNECT_FLAG_NONE, out var ckey)
                 .ThrowIfFailed();

@@ -39,17 +39,6 @@ namespace CloudSyncEngine
             var fileName = @"E:\tmp\sync2\test.txt";
             File.Delete(fileName);
             provider.CreatePlaceholderFromFile(@"test.txt", new FileInfo(@"E:\tmp\sync\test.txt"));
-            // var result = provider.CreatePlaceholders(new List<PlaceholderInfo>()
-            // {
-            //     new PlaceHolderDirectoryInfo()
-            //     {
-            //         RelativePath = "Test.txt",
-            //         CreationTime = DateTime.Now,
-            //         LastWriteTime = DateTime.Now,
-            //         LastAccessTime = DateTime.Now,
-            //         FileAttributes = FileAttributes.Normal,
-            //     }
-            // });
 
             using var hFile = GetHFILE(fileName);
             var result = CldApi.CfHydratePlaceholder(hFile);
