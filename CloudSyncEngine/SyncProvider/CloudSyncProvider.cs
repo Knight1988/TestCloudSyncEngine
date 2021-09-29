@@ -748,54 +748,56 @@ namespace Vanara.PInvoke.Tests
         //     key = ckey;
         // }
 
+        private static CF_CALLBACK _callback = StaticClass.CallBack;
+
         private void ConnectSyncRootTransferCallbacks()
         {
             callbackTable ??= new[]
         {
             new CF_CALLBACK_REGISTRATION
-                { Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_CANCEL_FETCH_DATA, Callback = StaticClass.CallBack },
+                { Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_CANCEL_FETCH_DATA, Callback = _callback },
             new CF_CALLBACK_REGISTRATION
             {
                 Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_CANCEL_FETCH_PLACEHOLDERS,
-                Callback = StaticClass.CallBack
+                Callback = _callback
             },
             new CF_CALLBACK_REGISTRATION
-                { Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_FETCH_DATA, Callback = StaticClass.CallBack },
+                { Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_FETCH_DATA, Callback = _callback },
             new CF_CALLBACK_REGISTRATION
-                { Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_FETCH_PLACEHOLDERS, Callback = StaticClass.CallBack },
+                { Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_FETCH_PLACEHOLDERS, Callback = _callback },
             new CF_CALLBACK_REGISTRATION
-                { Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_NOTIFY_DEHYDRATE, Callback = StaticClass.CallBack },
+                { Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_NOTIFY_DEHYDRATE, Callback = _callback },
             new CF_CALLBACK_REGISTRATION
             {
                 Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_NOTIFY_DEHYDRATE_COMPLETION,
-                Callback = StaticClass.CallBack
+                Callback = _callback
             },
             new CF_CALLBACK_REGISTRATION
-                { Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_NOTIFY_DELETE, Callback = StaticClass.CallBack },
+                { Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_NOTIFY_DELETE, Callback = _callback },
             new CF_CALLBACK_REGISTRATION
             {
                 Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_NOTIFY_DELETE_COMPLETION,
-                Callback = StaticClass.CallBack
+                Callback = _callback
             },
-            // new CF_CALLBACK_REGISTRATION
-            // {
-            //     Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_NOTIFY_FILE_CLOSE_COMPLETION,
-            //     Callback = OnFetchDataStatic
-            // },
-            // new CF_CALLBACK_REGISTRATION
-            // {
-            //     Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_NOTIFY_FILE_OPEN_COMPLETION,
-            //     Callback = StaticClass.CallBack
-            // },
-            // new CF_CALLBACK_REGISTRATION
-            //     { Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_NOTIFY_RENAME, Callback = OnFetchDataStatic },
-            // new CF_CALLBACK_REGISTRATION
-            // {
-            //     Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_NOTIFY_RENAME_COMPLETION,
-            //     Callback = OnFetchDataStatic
-            // },
-            // new CF_CALLBACK_REGISTRATION
-            //     { Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_VALIDATE_DATA, Callback = OnFetchDataStatic },
+            new CF_CALLBACK_REGISTRATION
+            {
+                Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_NOTIFY_FILE_CLOSE_COMPLETION,
+                Callback = _callback
+            },
+            new CF_CALLBACK_REGISTRATION
+            {
+                Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_NOTIFY_FILE_OPEN_COMPLETION,
+                Callback = _callback
+            },
+            new CF_CALLBACK_REGISTRATION
+                { Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_NOTIFY_RENAME, Callback = _callback },
+            new CF_CALLBACK_REGISTRATION
+            {
+                Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_NOTIFY_RENAME_COMPLETION,
+                Callback = _callback
+            },
+            new CF_CALLBACK_REGISTRATION
+                { Type = CF_CALLBACK_TYPE.CF_CALLBACK_TYPE_VALIDATE_DATA, Callback = _callback },
             CF_CALLBACK_REGISTRATION.CF_CALLBACK_REGISTRATION_END
         };
 
